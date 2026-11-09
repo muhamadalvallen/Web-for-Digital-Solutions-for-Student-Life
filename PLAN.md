@@ -1,626 +1,291 @@
 # Digital Solutions for Student Life
-## Product & Implementation Plan (Revisi)
+## Product & Implementation Plan
 
-**Status:** Working specification untuk MVP  
-**Tujuan:** Membangun aplikasi web produktivitas akademik yang bisa dipakai dan didemonstrasikan, dengan ruang pengembangan lanjutan setelah versi pertama stabil.
+**Status:** Scope MVP disepakati  
+**Fokus:** Aplikasi pendamping produktivitas akademik yang sederhana, fungsional, dan realistis diselesaikan oleh tim dengan waktu serta biaya terbatas.
 
 ---
 
 ## 1. Visi Produk
 
-Digital Solutions for Student Life adalah aplikasi pendamping produktivitas akademik untuk membantu mahasiswa:
+Digital Solutions for Student Life adalah aplikasi web yang membantu mahasiswa mengatur aktivitas akademik dan menjaga fokus belajar dalam satu tempat.
 
-1. memahami materi dan menentukan strategi belajar;
-2. memecah tujuan akademik menjadi langkah yang lebih kecil;
-3. mengatur sesi belajar dan waktu istirahat;
-4. mengelola jadwal kelas, tugas, dan ujian.
+Prinsip utama produk:
 
-Produk harus terasa ramah, suportif, sederhana, dan tidak menghakimi. Aplikasi membantu pengguna mengambil keputusan; aplikasi tidak menjanjikan hasil akademik atau menggantikan penilaian pengguna.
+- **Simple first:** utamakan fitur yang benar-benar dibutuhkan dan dapat digunakan.
+- **Working software first:** fungsi harus berjalan sebelum animasi atau dekorasi tambahan.
+- **Local-first:** data MVP disimpan di browser; belum membutuhkan akun atau database cloud.
+- **No AI dependency:** seluruh fitur MVP harus berjalan tanpa layanan AI atau API berbayar.
+- **Incremental delivery:** selesaikan dan uji satu fitur sebelum beralih ke fitur berikutnya.
+- **Keep the stack small:** jangan menambahkan library atau layanan tanpa kebutuhan yang jelas.
 
-### Prinsip pengembangan
+## 2. Batasan MVP
 
-- **Working software first:** fungsi utama harus berjalan sebelum animasi atau detail dekoratif.
-- **Local-first:** data MVP disimpan di browser agar tidak perlu membangun sistem akun dan database lebih dulu.
-- **AI is one module, not a dependency:** fitur non-AI tetap harus berfungsi ketika layanan AI sedang tidak tersedia.
-- **Incremental delivery:** bangun satu alur fitur sampai selesai, uji, lalu lanjut ke fitur berikutnya.
-- **Keep the stack small:** jangan menambahkan library, layanan, atau abstraksi sebelum ada kebutuhan nyata.
-
-## 2. Batasan dan Asumsi MVP
-
-MVP pertama ditujukan sebagai prototipe/demonstrasi aplikasi untuk satu pengguna pada satu browser.
+MVP adalah versi pertama yang dapat digunakan dan didemonstrasikan. Scope sengaja dibatasi agar tim dapat menyelesaikannya dengan sumber daya yang tersedia.
 
 ### Termasuk dalam MVP
 
-- Dashboard ringkasan aktivitas.
-- Study Buddy dengan satu penyedia AI.
-- Dream Tracker dengan target dan milestone.
-- Focus Mode dengan timer Pomodoro/Deep Work.
-- Kalender akademik manual.
-- Penyimpanan data lokal menggunakan `localStorage`.
-- Tampilan responsif untuk desktop dan ponsel.
-- Deployment ke Vercel.
+1. **Dashboard**
+   - Ringkasan agenda hari ini dan agenda terdekat.
+   - Pintasan ke Academic Calendar dan Focus Mode.
+   - Tampilan empty state ketika pengguna belum memiliki agenda.
+
+2. **Academic Calendar**
+   - Menambah, mengubah, dan menghapus agenda.
+   - Jenis agenda: kelas, tugas, ujian, dan personal.
+   - Menampilkan agenda berdasarkan tanggal.
+   - Mengurutkan agenda berdasarkan tanggal dan waktu.
+   - Filter berdasarkan jenis agenda.
+
+3. **Focus Mode**
+   - Timer Pomodoro: 25 menit fokus dan 5 menit istirahat.
+   - Timer Deep Work: 50 menit fokus dan 10 menit istirahat.
+   - Mulai, jeda, lanjutkan, reset, serta perpindahan sesi.
+   - Penanda yang jelas untuk sesi fokus dan istirahat.
+
+4. **Penyimpanan lokal**
+   - Data agenda disimpan menggunakan `localStorage`.
+   - Data tetap tersedia setelah halaman dimuat ulang pada browser yang sama.
+
+5. **Tampilan responsif**
+   - Layout dapat digunakan pada desktop dan ponsel.
+   - Navigasi dan kontrol utama tetap mudah digunakan pada layar kecil.
 
 ### Tidak termasuk dalam MVP
 
-- Registrasi, login, dan manajemen banyak akun.
-- Sinkronisasi data antarperangkat atau antar pengguna.
-- Integrasi otomatis dengan Google Calendar atau sistem akademik kampus.
-- Penjadwalan otomatis berbasis optimasi jadwal.
-- Deteksi kelelahan secara otomatis atau klaim pemantauan kesehatan.
-- Karakter 3D/animasi kompleks, virtual study room, dan audio streaming.
-- Upload dan analisis dokumen kuliah.
-- Notifikasi push dan aplikasi mobile native.
+- Study Buddy atau fitur chat AI.
+- Integrasi Gemini, Groq, atau provider AI lainnya.
+- Dream Tracker, target, dan milestone.
+- Login, registrasi, dan manajemen akun.
+- Database cloud atau sinkronisasi antarperangkat.
+- Integrasi Google Calendar atau sistem akademik kampus.
+- Penjadwalan otomatis.
+- Notifikasi push.
+- Riwayat dan analitik sesi fokus yang kompleks.
+- Karakter 3D, virtual study room, audio streaming, dan animasi kompleks.
 
-Fitur di luar cakupan ini tidak boleh ditambahkan sebelum seluruh kriteria MVP terpenuhi.
+Fitur-fitur tersebut dapat dipertimbangkan setelah MVP selesai dan dievaluasi. Jangan membuat halaman placeholder untuk fitur yang belum termasuk MVP.
 
 ## 3. Prioritas Fitur
 
-### P0 — Wajib untuk rilis MVP
-
-| Modul | Fitur | Kriteria minimum |
+| Prioritas | Modul | Kriteria selesai |
 |---|---|---|
-| Dashboard | Ringkasan target, agenda terdekat, dan pintasan | Data berasal dari data pengguna, bukan angka dummy permanen |
-| Study Buddy | Chat AI, pilihan gaya belajar, indikator loading, penanganan error | Pesan terkirim ke API server dan respons tampil di chat |
-| Dream Tracker | Tambah, ubah, hapus tujuan; tambah dan tandai milestone selesai | Progres dihitung dari milestone yang selesai |
-| Focus Mode | Preset 25/5 dan 50/10, mulai, jeda, lanjutkan, reset | Timer berjalan akurat dan status tombol konsisten |
-| Kalender | Tambah, ubah, hapus kelas/tugas/ujian; daftar agenda terurut | Agenda tersimpan dan tetap ada setelah halaman dimuat ulang |
-| Data lokal | Penyimpanan dan pemuatan data dari `localStorage` | Refresh browser tidak menghapus data |
-| Navigasi | Navigasi antarmodul | Semua halaman utama dapat dibuka melalui navigasi |
-
-### P1 — Dikerjakan setelah P0 stabil
-
-- Rekomendasi teknik belajar dari Study Buddy berdasarkan jenis mata kuliah.
-- Tombol “Tanya Strategi” dari item tugas/kalender.
-- Menghubungkan tugas tertentu dengan sesi Focus Mode.
-- Pengingat visual untuk agenda yang mendekat.
-- Perayaan sederhana ketika milestone selesai.
-- Ekspor data lokal ke file JSON dan impor kembali.
-
-### P2 — Pengembangan lanjutan
-
-- Penjadwalan ulang otomatis oleh AI.
-- Sinkronisasi kalender eksternal.
-- Akun pengguna dan database cloud.
-- Riwayat chat lintas sesi/perangkat.
-- Audio latar, karakter pendamping, dan animasi lanjutan.
-- Notifikasi browser/push dan analitik penggunaan.
-
----
+| P0 | Dashboard | Ringkasan agenda berasal dari data yang tersimpan dan pintasan bekerja |
+| P0 | Academic Calendar | Agenda dapat ditambah, diedit, dihapus, difilter, dan tetap ada setelah refresh |
+| P0 | Focus Mode | Kedua preset timer berjalan serta kontrol mulai, jeda, lanjut, dan reset berfungsi |
+| P0 | Navigasi | Semua halaman MVP dapat dibuka melalui navigasi |
+| P0 | Responsivitas | Halaman utama nyaman digunakan pada desktop dan ponsel |
+| P0 | Kualitas dasar | Tidak ada error build yang belum ditangani atau tombol utama yang tidak berfungsi |
 
 ## 4. Struktur Halaman dan User Flow
 
-### Struktur navigasi
+### Route MVP
 
-| Route | Halaman | Isi utama |
+| Route | Halaman | Isi |
 |---|---|---|
-| `/` | Dashboard | Sapaan, ringkasan target, agenda terdekat, pintasan |
-| `/study-buddy` | Study Buddy | Pilihan mode, chat, konteks mata kuliah |
-| `/dream-tracker` | Dream Tracker | Daftar tujuan, detail tujuan, milestone, progres |
-| `/focus` | Focus Mode | Timer, pilihan durasi, sesi fokus |
-| `/calendar` | Kalender | Daftar agenda, filter tipe, formulir tambah/edit |
+| `/` | Dashboard | Agenda hari ini, agenda terdekat, dan pintasan |
+| `/calendar` | Academic Calendar | Daftar agenda, filter, serta formulir tambah/edit |
+| `/focus` | Focus Mode | Timer Pomodoro dan Deep Work |
 
-Gunakan satu layout aplikasi yang konsisten: sidebar pada desktop, navigasi ringkas pada ponsel, header halaman, dan area konten utama.
+Gunakan layout aplikasi yang konsisten. Navigasi desktop dapat menggunakan sidebar, sedangkan ponsel menggunakan navigasi yang lebih ringkas.
 
 ### Alur pengguna utama
 
-1. Pengguna membuka Dashboard dan melihat target serta agenda terdekat.
-2. Pengguna membuat tujuan di Dream Tracker dan menambahkan milestone.
-3. Pengguna menambahkan kelas, tugas, atau ujian di Kalender.
-4. Pengguna memilih tugas lalu memulai sesi fokus.
-5. Ketika membutuhkan bantuan belajar, pengguna membuka Study Buddy dan memilih “Bimbing aku” atau “Jelaskan langsung”.
-6. Dashboard memperbarui ringkasan berdasarkan data yang tersimpan.
+1. Pengguna membuka Dashboard untuk melihat agenda hari ini dan agenda terdekat.
+2. Pengguna membuka Academic Calendar untuk menambahkan atau mengelola jadwal, tugas, dan ujian.
+3. Pengguna membuka Focus Mode untuk menjalankan sesi belajar.
+4. Pengguna kembali ke Dashboard untuk melihat ringkasan agenda yang sudah diperbarui.
 
----
+## 5. Teknologi dan Keputusan Teknis
 
-## 5. Tech Stack dan Keputusan Teknis
+| Bagian | Pilihan |
+|---|---|
+| Framework | Next.js App Router |
+| Bahasa | TypeScript |
+| UI | React |
+| Styling | Tailwind CSS 4 |
+| State | React state/hooks |
+| Penyimpanan agenda | `localStorage` |
+| Version control | Git dan GitHub |
+| Deployment | Vercel |
 
-| Bagian | Pilihan | Catatan |
-|---|---|---|
-| Framework | Next.js App Router | Gunakan TypeScript |
-| Styling | Tailwind CSS | Ikuti konfigurasi bawaan `create-next-app` |
-| Komponen UI | shadcn/ui | Tambahkan hanya komponen yang benar-benar dipakai |
-| Ikon | lucide-react | Hindari memasang beberapa library ikon |
-| AI | Google Gemini API | Satu provider untuk MVP; jangan integrasikan Gemini dan Groq sekaligus |
-| SDK AI | `@google/genai` | Ikuti API dan dokumentasi resmi yang terbaru saat implementasi |
-| State | React state/hooks | Tidak perlu Zustand/Redux untuk skala MVP ini |
-| Penyimpanan | `localStorage` | Melalui satu modul/hook penyimpanan terpusat |
-| Version control | Git + GitHub | Commit per milestone; Gunakan main sebagai branch utama yang stabil, feature branch untuk pengembangan fitur, dan Pull Request sebelum merge. Untuk kerja solo, workflow dapat disederhanakan dengan persetujuan Project Owner. |
-| Deployment | Vercel | Hubungkan repository GitHub |
+### Batasan teknis
 
-### Aturan pemilihan teknologi
+- Ikuti versi dependency yang sudah terpasang di repository.
+- Untuk Next.js, baca dokumentasi lokal yang relevan di `node_modules/next/dist/docs/` sebelum mengubah implementasi.
+- Gunakan React hooks dan komponen yang sudah tersedia sebelum menambahkan abstraksi baru.
+- Jangan menambahkan AI SDK, API route AI, atau environment variable AI.
+- Jangan menambahkan database, sistem autentikasi, atau library kalender kompleks untuk MVP.
+- Tambahkan dependency baru hanya jika ada kebutuhan yang jelas dan manfaatnya sepadan dengan biaya pemeliharaan.
+- Jangan melakukan rewrite struktur proyek tanpa alasan yang kuat.
 
-- Jangan menambahkan Supabase, Firebase, Prisma, atau database lain untuk MVP kecuali login/sinkronisasi cloud benar-benar diwajibkan.
-- Jangan memasang calendar library yang kompleks. Mulai dari daftar agenda berdasarkan tanggal; tampilan kalender bulanan dapat ditambahkan setelah fungsi CRUD stabil.
-- Hindari animasi/library visual yang tidak mendukung fungsi inti.
-- Gunakan komponen shadcn/ui seperlunya; jangan menghasilkan puluhan komponen yang belum dipakai.
+## 6. Data dan Penyimpanan
 
----
+Data utama MVP adalah agenda akademik.
 
-## 6. Arsitektur Aplikasi
-
-### Gambaran alur
-
-```text
-Browser
-  ├── Next.js pages and UI components
-  ├── Local application state
-  └── localStorage
-
-Study Buddy UI
-  └── POST /api/study-buddy
-        └── Gemini API (server-side only)
-```
-
-### Pembagian tanggung jawab
-
-- **UI components:** menampilkan data dan menerima input pengguna.
-- **Feature logic:** mengelola aturan fitur, misalnya perhitungan progres atau timer.
-- **Storage layer:** membaca/menulis data lokal; komponen tidak mengakses `localStorage` secara tersebar.
-- **API route:** menerima pesan Study Buddy, memvalidasi input, memanggil Gemini, dan mengembalikan respons.
-
-### Struktur folder yang disarankan
-
-Struktur boleh mengikuti hasil `create-next-app`, tetapi usahakan pemisahan berikut:
-
-```text
-src/
-  app/
-    page.tsx
-    study-buddy/page.tsx
-    dream-tracker/page.tsx
-    focus/page.tsx
-    calendar/page.tsx
-    api/study-buddy/route.ts
-  components/
-    layout/
-    dashboard/
-    study-buddy/
-    dream-tracker/
-    focus/
-    calendar/
-    ui/
-  hooks/
-  lib/
-    storage.ts
-    validation.ts
-    utils.ts
-  types/
-    index.ts
-```
-
-Jika proyek tidak menggunakan folder `src/`, letakkan folder-folder tersebut di root. Jangan memindahkan struktur proyek yang sudah dibuat tanpa alasan.
-
----
-
-## 7. Model Data MVP
-
-Gunakan ID unik untuk setiap item dan timestamp ISO untuk tanggal pembuatan/perubahan.
-
-### Goal
-
-```ts
-type Goal = {
-  id: string;
-  title: string;
-  description?: string;
-  category?: string;
-  targetDate?: string;
-  milestones: Milestone[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-type Milestone = {
-  id: string;
-  title: string;
-  isCompleted: boolean;
-  completedAt?: string;
-};
-```
-
-### CalendarEvent
+Contoh tipe data:
 
 ```ts
 type CalendarEvent = {
   id: string;
   title: string;
   type: "class" | "assignment" | "exam" | "personal";
-  date: string;       // YYYY-MM-DD
-  startTime?: string; // HH:mm
-  endTime?: string;   // HH:mm
+  date: string;        // YYYY-MM-DD
+  startTime?: string;  // HH:mm
+  endTime?: string;    // HH:mm
   notes?: string;
   createdAt: string;
   updatedAt: string;
 };
 ```
 
-### FocusSession
+Gunakan key penyimpanan yang jelas, misalnya `dsl:calendar-events`.
 
-```ts
-type FocusSession = {
-  id: string;
-  durationMinutes: number;
-  startedAt: string;
-  completedAt?: string;
-  relatedEventId?: string;
-};
-```
+Aturan penyimpanan:
 
-### ChatMessage
-
-```ts
-type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  createdAt: string;
-};
-```
-
-Simpan data berdasarkan key yang jelas, misalnya `dsl:goals`, `dsl:calendar-events`, `dsl:focus-sessions`, dan `dsl:chat-messages`. Tambahkan `storageVersion` agar perubahan struktur data di masa depan dapat ditangani dengan aman.
-
-### Aturan localStorage
-
-- Akses `localStorage` hanya di sisi browser, bukan ketika komponen dirender di server.
-- Sediakan nilai awal dan empty state yang jelas.
-- Tangani data JSON yang rusak tanpa membuat seluruh aplikasi gagal dibuka.
-- Jangan menyimpan API key, password, atau data rahasia di `localStorage`.
-- Jelaskan di UI bahwa data MVP tersimpan di browser/perangkat tersebut.
+- Akses `localStorage` hanya di sisi browser.
+- Tangani data JSON yang rusak agar tidak membuat seluruh aplikasi gagal dibuka.
+- Berikan empty state ketika belum ada agenda.
+- Jangan menyimpan password, API key, atau informasi rahasia di `localStorage`.
+- Jelaskan bahwa data MVP tersimpan di browser/perangkat yang digunakan.
 - Jangan menjanjikan sinkronisasi antarperangkat.
 
----
+Timer Focus Mode tidak memerlukan database atau backend. Gunakan perhitungan berbasis timestamp/deadline agar timer tidak mudah meleset ketika tab browser tidak aktif.
 
-## 8. Spesifikasi Setiap Modul
+## 7. Panduan UI/UX
 
-### A. Study Buddy
-
-**Tujuan:** menjadi pendamping belajar yang membantu pengguna memahami materi dengan cara yang sesuai kebutuhannya.
-
-**Fitur P0:**
-
-- Input pesan dan tombol kirim.
-- Pilihan pendekatan: `Bimbing aku` dan `Jelaskan langsung`.
-- Konteks opsional: nama mata kuliah/topik.
-- Tampilan pesan pengguna dan AI yang berbeda.
-- Loading state, empty state, error state, dan tombol coba lagi.
-- Batasi panjang input dan jumlah konteks percakapan yang dikirim ke model.
-
-**Aturan perilaku AI:**
-
-- Gunakan Bahasa Indonesia yang jelas, santai, dan suportif secara default.
-- Pada mode `Bimbing aku`, mulai dengan pertanyaan/petunjuk bertahap; jangan langsung membocorkan seluruh jawaban kecuali pengguna memintanya.
-- Pada mode `Jelaskan langsung`, berikan penjelasan langsung dengan contoh sederhana.
-- Sesuaikan penjelasan dengan konteks mata kuliah yang diberikan pengguna.
-- Jangan mengarang sumber, fakta, atau kepastian. Nyatakan bila informasi tidak cukup.
-- Hindari jawaban terlalu panjang untuk pertanyaan sederhana.
-
-**Implementasi API:**
-
-- Buat satu route server: `POST /api/study-buddy`.
-- API key hanya dibaca di server dari environment variable `GEMINI_API_KEY`.
-- Jangan gunakan prefix `NEXT_PUBLIC_` untuk API key.
-- Gunakan SDK JavaScript resmi `@google/genai` dan dokumentasi Gemini API yang berlaku saat implementasi. Dokumentasi Google saat ini mengarahkan proyek baru ke Interactions API; jangan menyalin contoh legacy tanpa memeriksa statusnya.
-- Validasi body request, mode, dan panjang pesan.
-- Tangani kuota habis, timeout, respons provider gagal, dan input tidak valid.
-- Jangan mengembalikan stack trace atau secret ke browser.
-- Batasi panjang riwayat yang dikirim agar penggunaan token terkendali.
-
-**Keamanan sebelum deployment publik:**
-
-Endpoint AI publik dapat dipanggil orang lain meskipun UI aplikasi tidak menampilkan tombol chat. Sebelum mengaktifkan AI pada deployment publik, siapkan pembatasan penggunaan/rate limit yang sesuai. Jangan mengandalkan rate limit in-memory sederhana pada serverless sebagai proteksi yang andal. Jika pembatasan belum tersedia, nonaktifkan endpoint AI pada deployment publik atau batasi akses demonstrasi.
-
-### B. Dream Tracker
-
-**Fitur P0:**
-
-- Membuat tujuan dengan judul, deskripsi opsional, dan tanggal target opsional.
-- Mengubah dan menghapus tujuan.
-- Menambahkan, mengubah, dan menghapus milestone.
-- Menandai milestone selesai/belum selesai.
-- Menampilkan progres berdasarkan milestone selesai dibagi total milestone.
-- Menampilkan empty state ketika belum ada tujuan.
-
-**Aturan:**
-
-- Jika tujuan tidak memiliki milestone, tampilkan status “Belum ada milestone”, bukan progres 100%.
-- Konfirmasi sebelum menghapus tujuan.
-- Animasi kemenangan cukup sederhana dan tidak boleh menghambat interaksi.
-
-**P1:** saran pemecahan tujuan menjadi milestone menggunakan AI. Untuk MVP, pengguna tetap membuat/mengedit milestone secara manual.
-
-### C. Focus Mode
-
-**Fitur P0:**
-
-- Preset Pomodoro 25 menit fokus / 5 menit istirahat.
-- Preset Deep Work 50 menit fokus / 10 menit istirahat.
-- Tombol mulai, jeda, lanjutkan, reset, dan pindah sesi.
-- Indikator apakah sesi sedang fokus atau istirahat.
-- Catat sesi yang selesai.
-
-**Aturan teknis:**
-
-- Perhitungan timer menggunakan timestamp/deadline, bukan hanya mengurangi angka setiap detik, agar tidak mudah meleset ketika tab browser tidak aktif.
-- Reset harus meminta konfirmasi jika sesi sedang berjalan.
-- Jangan mengklaim dapat mendeteksi kelelahan. Tampilkan pengingat istirahat sederhana berdasarkan sesi/durasi.
-
-**P1:** pilih durasi kustom dan hubungkan sesi dengan tugas kalender.
-
-### D. Kalender Akademik
-
-**Fitur P0:**
-
-- Menambah, mengubah, dan menghapus agenda.
-- Tipe agenda: kelas, tugas, ujian, dan personal.
-- Tanggal wajib; waktu mulai/selesai dan catatan bersifat opsional.
-- Tampilkan agenda mendatang dalam urutan tanggal/waktu.
-- Filter berdasarkan tipe agenda.
-- Tampilkan empty state dan agenda hari ini.
-
-**Batasan:**
-
-- Pengguna mengisi agenda secara manual.
-- Tidak ada sinkronisasi eksternal atau auto-scheduling pada MVP.
-- Validasi waktu selesai tidak boleh lebih awal daripada waktu mulai jika keduanya diisi.
-
-**P1:** tombol “Tanya Strategi” untuk mengirim judul dan konteks tugas ke Study Buddy.
-
-### E. Dashboard
-
-**Fitur P0:**
-
-- Menampilkan jumlah tujuan aktif dan ringkasan progres.
-- Menampilkan beberapa agenda terdekat.
-- Menampilkan pintasan ke Study Buddy dan Focus Mode.
-- Menampilkan empty state yang mengarahkan pengguna membuat tujuan atau agenda pertama.
-- Semua angka dan daftar diambil dari data tersimpan; jangan gunakan data contoh permanen seolah-olah data nyata.
-
----
-
-## 9. UI/UX Guidelines
-
-- Tampilan bersih, modern, tenang, dan suportif; hindari dashboard yang terlalu padat.
-- Gunakan satu sistem warna, tipografi, radius, spacing, dan gaya tombol secara konsisten.
-- Prioritaskan keterbacaan dan hierarki informasi daripada dekorasi.
-- Desktop: sidebar tetap dan konten utama.
-- Mobile: navigasi ringkas; tidak boleh ada horizontal overflow.
-- Semua form memiliki label, validasi, dan pesan error yang jelas.
-- Semua halaman memiliki loading, empty, dan error state sesuai kebutuhan.
-- Tombol harus memiliki label yang jelas; jangan memakai ikon saja untuk aksi yang tidak umum.
+- Gunakan tampilan modern, sederhana, tenang, dan mudah dipahami.
+- Pertahankan konsistensi warna, tipografi, spacing, radius, dan gaya tombol.
+- Utamakan keterbacaan dan hierarki informasi daripada dekorasi.
+- Hindari dashboard yang terlalu padat.
+- Form harus memiliki label, validasi, dan pesan kesalahan yang jelas.
+- Sediakan empty state yang membantu pengguna memahami tindakan berikutnya.
+- Semua tombol harus memiliki aksi nyata.
 - Perhatikan focus state keyboard dan kontras teks.
-- Jangan menggunakan animasi yang mengganggu atau membuat aplikasi terasa lambat.
+- Hindari animasi yang mengganggu atau memperlambat aplikasi.
+- Pastikan tidak ada horizontal overflow pada layar ponsel.
 
-### Arah visual awal
+## 8. Urutan Implementasi
 
-- Gaya: modern academic productivity.
-- Nuansa: hangat, fokus, ringan, dan profesional.
-- Gunakan warna netral sebagai dasar dan satu warna aksen utama.
-- Hindari penggunaan terlalu banyak gradient, glassmorphism, atau card bersarang.
+Kerjakan secara berurutan. Jangan membuka banyak fitur setengah jadi sekaligus.
 
-Detail warna dan font boleh ditetapkan Cursor pada tahap desain awal, tetapi harus diterapkan konsisten setelah disetujui.
+### Milestone 0 — Persiapan proyek
 
----
+- Pastikan proyek dapat dijalankan secara lokal.
+- Periksa struktur folder dan dependency yang sudah tersedia.
+- Pastikan Git dan repository GitHub siap digunakan.
 
-## 10. Urutan Implementasi Berbasis Milestone
-
-Tidak ada target hari yang kaku. Lanjut ke milestone berikutnya segera setelah kriteria selesai terpenuhi. Jangan membuka banyak fitur setengah jadi sekaligus.
-
-### Milestone 0 — Setup dan validasi risiko teknis
-
-1. Pastikan Node.js sesuai persyaratan versi Next.js yang digunakan.
-2. Buat proyek Next.js dengan TypeScript, App Router, Tailwind CSS, dan ESLint.
-3. Jalankan aplikasi secara lokal.
-4. Inisialisasi Git dan buat repository GitHub.
-5. Uji satu request Gemini sederhana melalui route server sebelum membangun seluruh UI.
-
-**Selesai jika:** aplikasi berjalan lokal, perubahan sudah di-commit, dan integrasi AI terbukti bisa merespons atau kegagalannya sudah diketahui dengan jelas.
-
-Jika API AI belum bisa dipakai, lanjutkan modul non-AI. Jangan biarkan kendala API menghentikan seluruh pengembangan.
+**Selesai jika:** aplikasi dapat dijalankan dan struktur proyek dipahami oleh anggota tim.
 
 ### Milestone 1 — App shell dan navigasi
 
-1. Buat layout global, sidebar/header, dan navigasi responsif.
-2. Buat route untuk Dashboard, Study Buddy, Dream Tracker, Focus Mode, dan Kalender.
-3. Buat kerangka tampilan setiap halaman dengan komponen konsisten.
+- Buat layout utama.
+- Buat navigasi desktop dan ponsel.
+- Siapkan route Dashboard, Academic Calendar, dan Focus Mode.
 
-**Selesai jika:** semua halaman dapat dibuka, navigasi berfungsi, dan layout tidak rusak di layar ponsel.
+**Selesai jika:** seluruh route MVP dapat dibuka dan navigasi berfungsi.
 
-### Milestone 2 — Data dan fitur non-AI
+### Milestone 2 — Academic Calendar
 
-Urutan pengerjaan:
+- Buat tipe data agenda dan penyimpanan lokal.
+- Implementasikan tambah, edit, hapus, dan filter agenda.
+- Tampilkan agenda secara terurut.
+- Tambahkan validasi dan empty state.
 
-1. Buat tipe data dan storage layer.
-2. Implementasikan Dream Tracker CRUD dan milestone.
-3. Implementasikan Kalender CRUD dan filter.
-4. Implementasikan Focus Timer.
-5. Hubungkan ringkasan data pada Dashboard.
+**Selesai jika:** seluruh operasi agenda berfungsi dan data tetap tersedia setelah refresh.
 
-**Selesai jika:** tambah/ubah/hapus berjalan, data bertahan setelah refresh, dan tidak ada data dummy yang menyamar sebagai data pengguna.
+### Milestone 3 — Focus Mode
 
-### Milestone 3 — Study Buddy
+- Implementasikan preset Pomodoro dan Deep Work.
+- Implementasikan mulai, jeda, lanjut, reset, dan perpindahan sesi.
+- Pastikan timer menggunakan timestamp/deadline agar tidak mudah meleset saat tab tidak aktif.
 
-1. Buat UI chat dan dua mode respons.
-2. Buat route server untuk provider AI.
-3. Tambahkan validasi input, loading, error, dan retry.
-4. Tambahkan batas konteks agar penggunaan token terkendali.
-5. Uji dengan pertanyaan sederhana, permintaan penjelasan, dan mode bimbingan.
+**Selesai jika:** kedua preset dan seluruh kontrol timer berjalan dengan benar.
 
-**Selesai jika:** pengguna dapat mengirim pesan dan menerima respons; kegagalan API ditampilkan dengan jelas tanpa merusak halaman.
+### Milestone 4 — Dashboard dan integrasi
 
-### Milestone 4 — Integrasi antarfitur dan penyempurnaan
+- Tampilkan agenda hari ini dan agenda terdekat dari data kalender.
+- Tambahkan pintasan ke Calendar dan Focus Mode.
+- Pastikan Dashboard berubah ketika data agenda diperbarui.
 
-1. Pastikan Dashboard membaca data aktual.
-2. Tambahkan pintasan kalender ke Focus Mode.
-3. Tambahkan “Tanya Strategi” jika Study Buddy sudah stabil.
-4. Rapikan empty state, validasi, dan responsivitas.
-
-**Selesai jika:** alur utama pengguna dapat dilakukan tanpa kebingungan dan seluruh aksi penting bekerja.
+**Selesai jika:** alur utama pengguna dapat dilakukan dari Dashboard tanpa kebingungan.
 
 ### Milestone 5 — Pengujian dan deployment
 
-1. Jalankan lint dan production build.
-2. Uji semua CRUD, timer, chat, dan penyimpanan setelah refresh.
-3. Uji tampilan desktop dan mobile.
-4. Periksa Console dan Network untuk error.
-5. Pastikan `.env.local` tidak masuk Git.
-6. Konfigurasikan environment variables di Vercel.
-7. Pastikan pembatasan endpoint AI siap sebelum mengaktifkan AI secara publik.
-8. Deploy dan uji URL production.
+- Jalankan lint dan production build.
+- Uji CRUD agenda dan seluruh kontrol timer.
+- Uji penyimpanan setelah refresh.
+- Uji tampilan desktop dan ponsel.
+- Periksa Console dan Network untuk error.
+- Pastikan tidak ada secret atau file lokal yang ikut masuk Git.
+- Deploy ke Vercel dan uji URL production.
 
-**Selesai jika:** deployment berhasil, halaman utama dapat dibuka, fitur P0 lolos pengujian, dan tidak ada secret yang terekspos.
+**Selesai jika:** fitur P0 berfungsi, build berhasil, dan aplikasi dapat digunakan melalui URL deployment.
 
----
+## 9. Checklist Penerimaan MVP
 
-## 11. Acceptance Criteria dan Checklist Pengujian
-
-### Pengujian fungsional
-
-- [ ] Semua route utama dapat dibuka.
-- [ ] Navigasi desktop dan mobile berfungsi.
-- [ ] Goal dapat dibuat, diedit, dihapus, dan progresnya berubah.
-- [ ] Milestone dapat ditambah dan ditandai selesai.
-- [ ] Agenda dapat dibuat, diedit, dihapus, dan difilter.
-- [ ] Agenda terurut sesuai tanggal dan waktu.
-- [ ] Timer dapat mulai, jeda, lanjut, reset, dan menyelesaikan sesi.
+- [ ] Dashboard dapat dibuka.
+- [ ] Dashboard menampilkan agenda dari data pengguna.
+- [ ] Agenda dapat ditambah, diedit, dan dihapus.
+- [ ] Agenda dapat difilter berdasarkan jenisnya.
+- [ ] Agenda ditampilkan dalam urutan tanggal/waktu yang benar.
+- [ ] Data agenda tetap ada setelah browser di-refresh.
+- [ ] Timer Pomodoro berfungsi.
+- [ ] Timer Deep Work berfungsi.
+- [ ] Mulai, jeda, lanjut, dan reset bekerja sesuai status timer.
 - [ ] Timer tidak melompat secara keliru ketika tab tidak aktif.
-- [ ] Data tetap ada setelah browser di-refresh.
-- [ ] Study Buddy menampilkan loading dan error dengan benar.
-- [ ] API key tidak muncul di source code browser, Git, atau log.
-- [ ] Dashboard menampilkan data pengguna yang sebenarnya.
-
-### Pengujian kualitas
-
-- [ ] Tidak ada error TypeScript/ESLint yang belum dijelaskan.
-- [ ] `npm run build` berhasil.
+- [ ] Navigasi desktop dan ponsel berfungsi.
 - [ ] Tidak ada horizontal overflow pada layar ponsel.
-- [ ] Form dapat digunakan dengan keyboard.
-- [ ] Semua tombol memiliki aksi yang nyata.
-- [ ] Tidak ada link atau tombol placeholder yang terlihat aktif tetapi tidak bekerja.
-- [ ] Empty state tersedia untuk data yang belum dibuat.
+- [ ] Semua tombol utama memiliki aksi nyata.
+- [ ] Tidak ada error TypeScript/ESLint atau build yang belum ditangani.
+- [ ] Deployment dapat dibuka dan diuji.
+
+## 10. Kolaborasi dan Git Workflow
+
+Proyek menggunakan prinsip kepemilikan dan kontribusi yang setara. Pembagian tugas bertujuan untuk koordinasi, bukan membentuk hierarki.
+
+- Semua anggota dapat mengusulkan ide, mengembangkan fitur, dan meninjau perubahan.
+- Keputusan implementasi rutin dapat dibuat mandiri selama sesuai scope dan pola proyek.
+- Perubahan arsitektur besar, dependency bersama, atau perubahan lintas-modul dibahas bersama.
+- Jangan menimpa atau membatalkan perubahan anggota lain tanpa koordinasi.
+- Periksa `git status` dan diff sebelum commit.
+- Gunakan branch pekerjaan, misalnya `feat/calendar-crud` atau `fix/focus-timer`.
+- Ajukan Pull Request dengan `main` sebagai base branch.
+- Pastikan PR hanya berisi perubahan yang berkaitan dengan pekerjaan tersebut.
+- Review digunakan untuk menjaga kualitas dan berbagi pemahaman, bukan sebagai persetujuan dari satu orang tertentu.
+
+## 11. Pengembangan Setelah MVP
+
+Fitur berikut **bukan bagian MVP** dan hanya dipertimbangkan setelah MVP selesai, diuji, serta dievaluasi bersama.
+
+| Fitur | Status |
+|---|---|
+| Dream Tracker: tujuan dan milestone | Ditunda |
+| Study Buddy berbasis AI | Ditunda; memerlukan evaluasi waktu, biaya API, dan keamanan |
+| Sinkronisasi kalender eksternal | Ditunda |
+| Login dan database cloud | Ditunda |
+| Notifikasi dan analitik lanjutan | Ditunda |
+
+Jangan mulai mengerjakan fitur-fitur ini hanya karena implementasinya menarik. Prioritaskan penyelesaian dan kualitas MVP.
+
+## 12. Aturan Pemeliharaan Dokumen
+
+Dokumen ini adalah acuan scope dan keputusan tingkat proyek, bukan catatan setiap perubahan kode.
+
+**PLAN.md cukup diperbarui ketika ada perubahan penting**, misalnya:
+
+- Scope MVP berubah.
+- Fitur wajib ditambah atau dihapus.
+- Stack atau arsitektur utama berubah.
+- Kriteria penerimaan berubah.
+- Tim menyepakati keputusan produk baru yang berdampak luas.
+
+Tidak perlu memperbarui dokumen untuk setiap bug fix, perubahan styling kecil, nama variabel, atau tugas harian. Catat perubahan rutin melalui commit dan Pull Request.
+
+`AGENTS.md` berisi aturan kerja AI dan kolaborasi. `PLAN.md` berisi arah produk, scope, dan kriteria keberhasilan. Keduanya tidak perlu disalin berulang-ulang.
 
 ---
 
-## 12. Workflow Vibecoding dengan Cursor
+## Definisi Keberhasilan MVP
 
-### Aturan kerja
-
-1. Baca `PLAN.md` dan `AGENTS.md` sebelum memulai pekerjaan.
-2. Kerjakan satu milestone atau satu fitur kecil per prompt.
-3. Untuk perubahan multi-file, minta Cursor membuat rencana singkat terlebih dahulu, lalu setujui sebelum implementasi.
-4. Minta Agent memeriksa file yang relevan saja; jangan meminta seluruh aplikasi ditulis ulang.
-5. Setelah perubahan, minta Agent menjelaskan file yang diubah, cara menguji, dan hal yang belum selesai.
-6. Periksa diff sebelum menerima perubahan.
-7. Jalankan aplikasi dan uji fitur di browser; jangan menganggap kode benar hanya karena Agent menyatakan selesai.
-8. Gunakan Ask untuk bertanya atau memahami kode tanpa meminta perubahan.
-9. Gunakan checkpoint/commit sebelum perubahan besar agar mudah kembali ke versi stabil.
-10. Jangan menginstal dependency baru tanpa alasan dan penjelasan manfaatnya.
-
-### Format prompt kerja harian
-
-```text
-Baca PLAN.md dan AGENTS.md terlebih dahulu.
-Kerjakan hanya milestone/fitur berikut: [NAMA FITUR].
-
-Kriteria selesai:
-1. [KRITERIA 1]
-2. [KRITERIA 2]
-3. [KRITERIA 3]
-
-Batasan:
-- Jangan mengubah fitur lain yang sudah berjalan.
-- Gunakan pola dan komponen yang sudah ada.
-- Jangan menambah dependency tanpa alasan.
-- Tangani loading, empty, dan error state jika relevan.
-
-Setelah selesai:
-- Jalankan pemeriksaan yang relevan.
-- Laporkan file yang diubah.
-- Laporkan hasil pengujian dan masalah yang masih tersisa.
-- Jangan mengklaim pengujian berhasil jika belum benar-benar dijalankan.
-```
-
-### Git workflow
-
-`main` adalah branch utama dan stabil. Setiap fitur dikembangkan di feature branch, lalu diajukan melalui Pull Request. Pull Request ditinjau sebelum di-merge ke `main`. Hindari commit langsung ke `main` untuk pengembangan fitur.
-
-Buat commit di feature branch setiap milestone yang stabil.
-
-Contoh pesan commit:
-
-```text
-chore: initialize Next.js project
-feat: add application layout and navigation
-feat: implement dream tracker
-feat: implement academic calendar
-feat: add focus timer
-feat: integrate study buddy API
-fix: handle local storage hydration
-```
-
-Untuk kerja solo, workflow ini boleh disederhanakan atas persetujuan Project Owner. Jangan membuat branching yang lebih kompleks daripada feature branch dan Pull Request.
-
----
-
-## 13. Deployment dan Keamanan
-
-### Environment variables
-
-File `.env.local` hanya berada di komputer lokal dan harus masuk `.gitignore`.
-
-Contoh nama variabel:
-
-```env
-GEMINI_API_KEY=isi_api_key_lokal
-GEMINI_MODEL=nama_model_yang_dipilih
-```
-
-Nama model harus ditetapkan setelah memeriksa daftar model dan akses yang tersedia pada akun/proyek AI yang digunakan. Jangan menebak nama model.
-
-Saat deployment, masukkan variabel yang sama melalui pengaturan Environment Variables di Vercel. Jangan pernah memasukkan nilai API key ke `NEXT_PUBLIC_*`.
-
-### Deployment checklist
-
-- [ ] Repository GitHub sudah terhubung ke Vercel.
-- [ ] Environment variables sudah diatur untuk environment yang sesuai.
-- [ ] Production build berhasil.
-- [ ] API key tidak ada dalam repository.
-- [ ] Endpoint AI memiliki pembatasan penggunaan atau dinonaktifkan untuk deployment publik.
-- [ ] Semua halaman diuji dari URL production.
-- [ ] Data lokal dijelaskan sebagai data per-browser/perangkat.
-
----
-
-## 14. Keputusan yang Tidak Boleh Diubah Tanpa Alasan
-
-Untuk mencegah scope melebar dan penggunaan kuota Cursor berlebihan, pertahankan keputusan berikut selama MVP:
-
-1. Tetap menggunakan Next.js App Router + TypeScript + Tailwind.
-2. Tetap menggunakan satu provider AI.
-3. Tetap menggunakan localStorage; belum ada login dan database cloud.
-4. Calendar bersifat manual; belum ada integrasi eksternal atau auto-scheduling.
-5. Timer menggunakan preset sederhana; belum ada simulasi kehadiran virtual.
-6. Prioritaskan fungsi dan stabilitas sebelum animasi/dekorasi.
-7. Jangan melakukan rewrite proyek secara keseluruhan untuk memperbaiki satu fitur.
-
-Perubahan terhadap keputusan ini harus disertai alasan, dampak terhadap waktu/kompleksitas, dan persetujuan pemilik proyek.
-
----
-
-## 15. Referensi Teknis Resmi
-
-Gunakan dokumentasi resmi berikut dan periksa kembali saat implementasi karena versi dan API dapat berubah:
-
-- Next.js App Router: https://nextjs.org/docs/app
-- Next.js Installation: https://nextjs.org/docs/app/getting-started/installation
-- shadcn/ui untuk Next.js: https://ui.shadcn.com/docs/installation/next
-- Cursor Agent: https://cursor.com/help/ai-features/agent
-- Cursor Rules dan `AGENTS.md`: https://cursor.com/docs/rules
-- Gemini API: https://ai.google.dev/gemini-api/docs
-- Gemini API key dan keamanan: https://ai.google.dev/gemini-api/docs/api-key
-- Gemini API libraries: https://ai.google.dev/gemini-api/docs/libraries
-- Vercel + Next.js: https://vercel.com/docs/frameworks/full-stack/nextjs
-- Vercel Git deployments: https://vercel.com/docs/git
-
----
-
-**Definisi keberhasilan MVP:** seorang mahasiswa dapat membuka dashboard, mengelola tujuan dan agenda, menjalankan sesi fokus, serta meminta bantuan Study Buddy ketika API tersedia. Data dasar bertahan setelah refresh pada browser yang sama, tampilan nyaman di desktop maupun ponsel, dan aplikasi dapat diakses melalui deployment. Fitur lanjutan hanya dikerjakan setelah definisi ini terpenuhi.
+Seorang mahasiswa dapat melihat agenda akademik melalui Dashboard, mengelola kelas/tugas/ujian di Academic Calendar, dan menjalankan sesi belajar melalui Focus Mode. Data agenda tetap tersedia setelah refresh pada browser yang sama. Aplikasi nyaman digunakan pada desktop dan ponsel, seluruh fungsi utama berjalan, dan aplikasi dapat diakses melalui deployment.
