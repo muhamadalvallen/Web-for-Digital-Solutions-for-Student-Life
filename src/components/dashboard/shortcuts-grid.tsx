@@ -84,3 +84,4 @@ export function DashboardShortcuts() {
     </section>
   );
 }
+
