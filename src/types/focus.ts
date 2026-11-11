@@ -28,3 +28,4 @@ export const FOCUS_PRESETS: Record<FocusPresetId, FocusPreset> = {
     breakMinutes: 10,
   },
 };
+

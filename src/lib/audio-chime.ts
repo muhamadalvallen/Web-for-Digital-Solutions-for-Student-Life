@@ -41,3 +41,4 @@ export function playSessionEndChime(): void {
     console.debug("Audio notification could not play:", error);
   }
 }
+
