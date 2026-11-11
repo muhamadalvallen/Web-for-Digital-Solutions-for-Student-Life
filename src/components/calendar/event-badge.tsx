@@ -17,3 +17,4 @@ export function EventBadge({ type }: { type: CalendarEventType }) {
     </span>
   );
 }
+

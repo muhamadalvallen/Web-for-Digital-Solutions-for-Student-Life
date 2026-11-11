@@ -50,3 +50,4 @@ export const EVENT_TYPE_COLORS: Record<
     dot: "bg-emerald-500",
   },
 };
+
