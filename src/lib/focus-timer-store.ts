@@ -308,3 +308,4 @@ export function selectPresetAction(newPresetId: FocusPresetId): void {
   updateDocumentTitle(storeState);
   notifyListeners();
 }
+
