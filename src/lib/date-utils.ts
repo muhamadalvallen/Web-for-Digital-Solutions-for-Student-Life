@@ -31,7 +31,28 @@ export function formatIndonesianDate(dateStr: string): string {
 }
 
 /**
- * Determines if date is today, tomorrow, or past
+ * Format date with full month name for headers, e.g. "Rabu, 11 November 2026"
+ */
+export function formatFullIndonesianDate(dateStr: string): string {
+  if (!dateStr) return "";
+  try {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    if (!year || !month || !day) return dateStr;
+    const date = new Date(year, month - 1, day);
+
+    return new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
+  } catch {
+    return dateStr;
+  }
+}
+
+/**
+ * Determines if date is today, tomorrow, or in the future
  */
 export function getDateRelativeLabel(dateStr: string): string | null {
   const today = getTodayDateString();
@@ -44,6 +65,17 @@ export function getDateRelativeLabel(dateStr: string): string | null {
   ).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
 
   if (dateStr === tomorrowStr) return "Besok";
+
+  // Calculate day difference
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const targetDate = new Date(year, month - 1, day);
+  const todayDate = new Date(tYear, tMonth - 1, tDay);
+  const diffTime = targetDate.getTime() - todayDate.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays > 1 && diffDays <= 7) {
+    return `${diffDays} hari lagi`;
+  }
 
   return null;
 }
@@ -61,4 +93,3 @@ export function formatTimeRange(startTime?: string, endTime?: string): string | 
   }
   return `Hingga ${endTime} WIB`;
 }
-
