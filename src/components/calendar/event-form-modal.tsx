@@ -5,6 +5,7 @@ import {
   CalendarEvent,
   CalendarEventType,
   EVENT_TYPE_LABELS,
+  REMINDER_OPTIONS,
 } from "@/types/calendar";
 import { CreateEventInput } from "@/hooks/use-calendar-events";
 import { getTodayDateString } from "@/lib/date-utils";
@@ -47,6 +48,9 @@ function EventFormContent({
   );
   const [startTime, setStartTime] = useState(initialEvent?.startTime ?? "");
   const [endTime, setEndTime] = useState(initialEvent?.endTime ?? "");
+  const [reminderMinutes, setReminderMinutes] = useState<number | undefined>(
+    initialEvent?.reminderMinutes
+  );
   const [notes, setNotes] = useState(initialEvent?.notes ?? "");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -78,6 +82,7 @@ function EventFormContent({
       startTime: startTime || undefined,
       endTime: endTime || undefined,
       notes: notes.trim() || undefined,
+      reminderMinutes,
     });
 
     onClose();
@@ -236,6 +241,34 @@ function EventFormContent({
               <p className="mt-1 text-xs text-red-600">{errors.endTime}</p>
             )}
           </div>
+        </div>
+
+        {/* Pengingat Notifikasi */}
+        <div>
+          <label
+            htmlFor="event-reminder"
+            className="block text-xs font-semibold text-foreground"
+          >
+            Pengingat Notifikasi
+          </label>
+          <select
+            id="event-reminder"
+            value={reminderMinutes ?? -1}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setReminderMinutes(val >= 0 ? val : undefined);
+            }}
+            className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground transition focus-visible:outline-2 focus-visible:outline-accent"
+          >
+            {REMINDER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-[11px] text-muted">
+            Pemberitahuan pengingat otomatis akan muncul sebelum waktu agenda dimulai.
+          </p>
         </div>
 
         {/* Catatan */}

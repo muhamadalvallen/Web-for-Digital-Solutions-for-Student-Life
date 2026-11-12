@@ -19,6 +19,7 @@ export type CreateEventInput = {
   startTime?: string;
   endTime?: string;
   notes?: string;
+  reminderMinutes?: number;
 };
 
 export type UpdateEventInput = Partial<CreateEventInput>;
@@ -55,6 +56,10 @@ export function useCalendarEvents() {
       startTime: input.startTime?.trim() || undefined,
       endTime: input.endTime?.trim() || undefined,
       notes: input.notes?.trim() || undefined,
+      reminderMinutes:
+        typeof input.reminderMinutes === "number" && input.reminderMinutes >= 0
+          ? input.reminderMinutes
+          : undefined,
       createdAt: now,
       updatedAt: now,
     };
@@ -86,6 +91,10 @@ export function useCalendarEvents() {
           }),
           ...(updates.notes !== undefined && {
             notes: updates.notes.trim() || undefined,
+          }),
+          ...(updates.reminderMinutes !== undefined && {
+            reminderMinutes:
+              updates.reminderMinutes >= 0 ? updates.reminderMinutes : undefined,
           }),
           updatedAt: now,
         };
