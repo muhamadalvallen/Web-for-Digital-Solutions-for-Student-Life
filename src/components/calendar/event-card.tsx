@@ -43,6 +43,38 @@ export function EventCard({
             <span className="text-xs text-muted font-medium">
               {formattedDate}
             </span>
+            {event.reminderMinutes !== undefined && event.reminderMinutes >= 0 && (
+              <span
+                title={`Pengingat diset ${
+                  event.reminderMinutes === 0
+                    ? "tepat waktu"
+                    : `${event.reminderMinutes} menit sebelumnya`
+                }`}
+                className="inline-flex items-center gap-1 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/60 px-1.5 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                {event.reminderMinutes === 0
+                  ? "Tepat waktu"
+                  : event.reminderMinutes >= 1440
+                  ? "1 hari sebelum"
+                  : event.reminderMinutes >= 60
+                  ? `${event.reminderMinutes / 60} jam sebelum`
+                  : `${event.reminderMinutes} mnt sebelum`}
+              </span>
+            )}
           </div>
 
           <h3 className="mt-2 text-base font-semibold text-foreground break-words">
