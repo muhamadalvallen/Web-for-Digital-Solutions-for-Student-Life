@@ -14,6 +14,7 @@ type FormModalProps = {
   onClose: () => void;
   onSubmit: (data: CreateEventInput) => void;
   initialEvent?: CalendarEvent | null;
+  defaultDate?: string;
 };
 
 const EVENT_TYPES: CalendarEventType[] = [
@@ -25,10 +26,12 @@ const EVENT_TYPES: CalendarEventType[] = [
 
 function EventFormContent({
   initialEvent,
+  defaultDate,
   onClose,
   onSubmit,
 }: {
   initialEvent?: CalendarEvent | null;
+  defaultDate?: string;
   onClose: () => void;
   onSubmit: (data: CreateEventInput) => void;
 }) {
@@ -40,7 +43,7 @@ function EventFormContent({
     initialEvent?.type ?? "class"
   );
   const [date, setDate] = useState(
-    initialEvent?.date ?? getTodayDateString()
+    initialEvent?.date ?? defaultDate ?? getTodayDateString()
   );
   const [startTime, setStartTime] = useState(initialEvent?.startTime ?? "");
   const [endTime, setEndTime] = useState(initialEvent?.endTime ?? "");
@@ -280,6 +283,7 @@ export function EventFormModal({
   onClose,
   onSubmit,
   initialEvent,
+  defaultDate,
 }: FormModalProps) {
   // Handle ESC key press
   useEffect(() => {
@@ -305,8 +309,9 @@ export function EventFormModal({
         onClick={(e) => e.stopPropagation()}
       >
         <EventFormContent
-          key={initialEvent?.id ?? "new-event"}
+          key={initialEvent?.id ?? defaultDate ?? "new-event"}
           initialEvent={initialEvent}
+          defaultDate={defaultDate}
           onClose={onClose}
           onSubmit={onSubmit}
         />
