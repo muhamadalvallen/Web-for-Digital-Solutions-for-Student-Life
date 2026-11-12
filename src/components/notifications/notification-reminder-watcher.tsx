@@ -22,3 +22,4 @@ export function NotificationReminderWatcher() {
 
   return <ToastContainer />;
 }
+
