@@ -23,13 +23,22 @@ export function AppNav() {
   return (
     <>
       <aside className="hidden w-64 shrink-0 border-r border-border bg-surface md:flex md:flex-col">
-        <div className="border-b border-border px-5 py-6">
-          <p className="text-xs font-medium tracking-wide text-muted uppercase">
-            Student Life
-          </p>
-          <p className="mt-1 text-lg font-semibold text-foreground">
-            Pendamping akademik
-          </p>
+        <div className="border-b border-border px-5 py-5">
+          <Link href="/" className="flex items-center gap-3 group">
+            <span
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-xl transition-transform group-hover:scale-105"
+              role="img"
+              aria-label="Logo Stududu"
+            >
+              📚
+            </span>
+            <div>
+              <p className="text-lg font-bold tracking-tight text-foreground leading-tight">
+                Stududu
+              </p>
+              <p className="text-xs text-muted">Study Buddy</p>
+            </div>
+          </Link>
         </div>
         <nav aria-label="Utama" className="flex flex-1 flex-col gap-1 p-3">
           {navigationItems.map((item) => {
@@ -41,26 +50,23 @@ export function AppNav() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`${linkClassName} ${
-                  active
-                    ? "bg-accent-soft text-accent"
-                    : "text-foreground hover:bg-accent-soft/60"
-                }`}
+                className={`${linkClassName} ${active
+                  ? "bg-accent-soft text-accent"
+                  : "text-foreground hover:bg-accent-soft/60"
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="block">{item.label}</span>
                   {isFocusItem && isTimerActive && (
                     <span
-                      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-semibold ${
-                        status === "running"
-                          ? "bg-accent text-white"
-                          : "bg-black/10 dark:bg-white/10 text-muted"
-                      }`}
+                      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-semibold ${status === "running"
+                        ? "bg-accent text-white"
+                        : "bg-black/10 dark:bg-white/10 text-muted"
+                        }`}
                     >
                       <span
-                        className={`h-1.5 w-1.5 rounded-full ${
-                          mode === "focus" ? "bg-emerald-300" : "bg-amber-300"
-                        } ${status === "running" ? "animate-ping" : ""}`}
+                        className={`h-1.5 w-1.5 rounded-full ${mode === "focus" ? "bg-emerald-300" : "bg-amber-300"
+                          } ${status === "running" ? "animate-ping" : ""}`}
                       />
                       {formattedMinutes}:{formattedSeconds}
                     </span>
@@ -89,9 +95,8 @@ export function AppNav() {
                 <Link
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`flex min-h-14 flex-col items-center justify-center px-2 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${
-                    active ? "text-accent font-semibold" : "text-muted"
-                  }`}
+                  className={`flex min-h-14 flex-col items-center justify-center px-2 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${active ? "text-accent font-semibold" : "text-muted"
+                    }`}
                 >
                   <span>{item.label}</span>
                   {isFocusItem && isTimerActive && (

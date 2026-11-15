@@ -14,9 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Digital Solutions for Student Life",
+  title: "Stududu",
   description:
     "Pendamping akademik untuk melihat agenda, mengelola kalender, dan menjalankan sesi fokus.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
