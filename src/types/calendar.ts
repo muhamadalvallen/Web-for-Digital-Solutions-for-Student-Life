@@ -8,9 +8,21 @@ export type CalendarEvent = {
   startTime?: string; // HH:mm
   endTime?: string; // HH:mm
   notes?: string;
+  reminderMinutes?: number; // Menit sebelum acara: 0 (tepat waktu), 5, 10, 15, 30, 60, 1440, atau undefined (tidak ada)
   createdAt: string;
   updatedAt: string;
 };
+
+export const REMINDER_OPTIONS = [
+  { value: -1, label: "Tanpa pengingat" },
+  { value: 0, label: "Tepat waktu acara" },
+  { value: 5, label: "5 menit sebelumnya" },
+  { value: 10, label: "10 menit sebelumnya" },
+  { value: 15, label: "15 menit sebelumnya" },
+  { value: 30, label: "30 menit sebelumnya" },
+  { value: 60, label: "1 jam sebelumnya" },
+  { value: 1440, label: "1 hari sebelumnya" },
+] as const;
 
 export type CalendarFilterType = "all" | CalendarEventType;
 

@@ -4,7 +4,7 @@ import {
   TimerStatus,
   FOCUS_PRESETS,
 } from "@/types/focus";
-import { playSessionEndChime } from "@/lib/audio-chime";
+import { notifyFocusTimerFinished } from "@/lib/notification-service";
 
 export const FOCUS_STORAGE_KEY = "dsl:focus-timer-state";
 
@@ -108,7 +108,7 @@ function startCountdownInterval() {
 
       persistState();
       updateDocumentTitle(storeState);
-      playSessionEndChime();
+      notifyFocusTimerFinished(storeState.mode);
       notifyListeners();
     } else if (secondsLeft !== storeState.remainingSeconds) {
       storeState = {

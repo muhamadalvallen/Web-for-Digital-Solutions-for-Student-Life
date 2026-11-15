@@ -42,3 +42,45 @@ export function playSessionEndChime(): void {
   }
 }
 
+/**
+ * Plays a pleasant three-tone chime for agenda reminders (G4 -> C5 -> E5)
+ */
+export function playReminderChime(): void {
+  if (typeof window === "undefined") return;
+
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+
+    const playTone = (freq: number, startDelay: number, duration: number) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + startDelay);
+
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + startDelay);
+      gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + startDelay + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startDelay + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(ctx.currentTime + startDelay);
+      osc.stop(ctx.currentTime + startDelay + duration);
+    };
+
+    playTone(392.0, 0, 0.25); // G4
+    playTone(523.25, 0.15, 0.25); // C5
+    playTone(659.25, 0.3, 0.45); // E5
+  } catch (error) {
+    console.debug("Reminder audio could not play:", error);
+  }
+}
+
+

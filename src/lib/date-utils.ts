@@ -93,3 +93,74 @@ export function formatTimeRange(startTime?: string, endTime?: string): string | 
   }
   return `Hingga ${endTime} WIB`;
 }
+
+/**
+ * Format month and year, e.g. "Desember 2026"
+ */
+export function formatMonthYear(year: number, month: number): string {
+  const date = new Date(year, month, 1);
+  return new Intl.DateTimeFormat("id-ID", {
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+export type CalendarDayCell = {
+  dateStr: string;
+  dayNumber: number;
+  isCurrentMonth: boolean;
+};
+
+/**
+ * Returns a 35 or 42 day matrix for the specified year and month (0-indexed month)
+ */
+export function getMonthMatrix(year: number, month: number): CalendarDayCell[] {
+  const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0 = Sunday
+  const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  const cells: CalendarDayCell[] = [];
+
+  // Previous month trailing days
+  for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+    const day = daysInPrevMonth - i;
+    const prevDate = new Date(year, month - 1, day);
+    const dateStr = `${prevDate.getFullYear()}-${String(
+      prevDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(prevDate.getDate()).padStart(2, "0")}`;
+    cells.push({
+      dateStr,
+      dayNumber: day,
+      isCurrentMonth: false,
+    });
+  }
+
+  // Current month days
+  for (let day = 1; day <= daysInCurrentMonth; day++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+    cells.push({
+      dateStr,
+      dayNumber: day,
+      isCurrentMonth: true,
+    });
+  }
+
+  // Next month leading days to complete full weeks
+  const totalCells = Math.ceil(cells.length / 7) * 7;
+  const trailingCount = totalCells - cells.length;
+  for (let day = 1; day <= trailingCount; day++) {
+    const nextDate = new Date(year, month + 1, day);
+    const dateStr = `${nextDate.getFullYear()}-${String(
+      nextDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(nextDate.getDate()).padStart(2, "0")}`;
+    cells.push({
+      dateStr,
+      dayNumber: day,
+      isCurrentMonth: false,
+    });
+  }
+
+  return cells;
+}

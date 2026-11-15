@@ -5,6 +5,7 @@ import {
   CalendarEvent,
   CalendarEventType,
   EVENT_TYPE_LABELS,
+  REMINDER_OPTIONS,
 } from "@/types/calendar";
 import { CreateEventInput } from "@/hooks/use-calendar-events";
 import { getTodayDateString } from "@/lib/date-utils";
@@ -14,6 +15,7 @@ type FormModalProps = {
   onClose: () => void;
   onSubmit: (data: CreateEventInput) => void;
   initialEvent?: CalendarEvent | null;
+  defaultDate?: string;
 };
 
 const EVENT_TYPES: CalendarEventType[] = [
@@ -25,10 +27,12 @@ const EVENT_TYPES: CalendarEventType[] = [
 
 function EventFormContent({
   initialEvent,
+  defaultDate,
   onClose,
   onSubmit,
 }: {
   initialEvent?: CalendarEvent | null;
+  defaultDate?: string;
   onClose: () => void;
   onSubmit: (data: CreateEventInput) => void;
 }) {
@@ -40,10 +44,13 @@ function EventFormContent({
     initialEvent?.type ?? "class"
   );
   const [date, setDate] = useState(
-    initialEvent?.date ?? getTodayDateString()
+    initialEvent?.date ?? defaultDate ?? getTodayDateString()
   );
   const [startTime, setStartTime] = useState(initialEvent?.startTime ?? "");
   const [endTime, setEndTime] = useState(initialEvent?.endTime ?? "");
+  const [reminderMinutes, setReminderMinutes] = useState<number | undefined>(
+    initialEvent?.reminderMinutes
+  );
   const [notes, setNotes] = useState(initialEvent?.notes ?? "");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -75,6 +82,7 @@ function EventFormContent({
       startTime: startTime || undefined,
       endTime: endTime || undefined,
       notes: notes.trim() || undefined,
+      reminderMinutes,
     });
 
     onClose();
@@ -235,6 +243,34 @@ function EventFormContent({
           </div>
         </div>
 
+        {/* Pengingat Notifikasi */}
+        <div>
+          <label
+            htmlFor="event-reminder"
+            className="block text-xs font-semibold text-foreground"
+          >
+            Pengingat Notifikasi
+          </label>
+          <select
+            id="event-reminder"
+            value={reminderMinutes ?? -1}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setReminderMinutes(val >= 0 ? val : undefined);
+            }}
+            className="mt-1.5 w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground transition focus-visible:outline-2 focus-visible:outline-accent"
+          >
+            {REMINDER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-[11px] text-muted">
+            Pemberitahuan pengingat otomatis akan muncul sebelum waktu agenda dimulai.
+          </p>
+        </div>
+
         {/* Catatan */}
         <div>
           <label
@@ -280,6 +316,7 @@ export function EventFormModal({
   onClose,
   onSubmit,
   initialEvent,
+  defaultDate,
 }: FormModalProps) {
   // Handle ESC key press
   useEffect(() => {
@@ -305,8 +342,9 @@ export function EventFormModal({
         onClick={(e) => e.stopPropagation()}
       >
         <EventFormContent
-          key={initialEvent?.id ?? "new-event"}
+          key={initialEvent?.id ?? defaultDate ?? "new-event"}
           initialEvent={initialEvent}
+          defaultDate={defaultDate}
           onClose={onClose}
           onSubmit={onSubmit}
         />
